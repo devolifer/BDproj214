@@ -34,7 +34,7 @@ echo("<p>Connected to MySQL database $dbname on $host as user $user</p>\n");
 $sql = "INSERT INTO concorrente (pessoa,leilao) VALUES ($nif,$lid)";
 $result = $connection->query($sql);
 if (!$result) {
-	echo("<p> Pessoa nao registada: Erro na Query:($sql) <p>");
+	echo("<p> Pessoa nao registada: Erro na Query: [$sql] <p>");
 	exit();
 }
 echo("<p> Pessoa ($username), nif ($nif) Registada no leilao ($lid)</p>\n");

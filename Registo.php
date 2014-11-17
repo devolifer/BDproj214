@@ -61,8 +61,7 @@ $_SESSION['nif'] = $nif;
 $sql = "SELECT * FROM leilao";
 $result = $connection->query($sql);
 echo("<table border=\"1\">\n");
-echo("<tr><td>ID</td><td>nif</td><td>diahora</td><td>NrDoDia</td><td>nome</td><td>tipo</td><td>valo
-rbase</td></tr>\n");
+echo("<tr><td>ID</td><td>nif</td><td>dia</td><td>NrDoDia</td><td>nome</td><td>tipo</td><td>valorbase</td></tr>\n");
 $idleilao = 0;
 
 
@@ -71,7 +70,7 @@ $idleilao = $idleilao +1;
 echo("<tr><td>");
 echo($idleilao); echo("</td><td>");
 echo($row["nif"]); echo("</td><td>");
-echo($row["diahora"]); echo("</td><td>");
+echo($row["dia"]); echo("</td><td>");
 echo($row["nrleilaonodia"]); echo("</td><td>");
 echo($row["nome"]); echo("</td><td>");
 echo($row["tipo"]); echo("</td><td>");
@@ -80,7 +79,7 @@ $leilao[$idleilao]= array($row["nif"],$row["diahora"],$row["nrleilaonodia"]);
 }
 echo("</table>\n");
 ?>
-<form action="leilao.php" method="post">
+<form action="Leilao.php" method="post">
 <h2>Escolha o ID do leilão que pretende concorrer</h2>
 <p>ID : <input type="text" name="lid" /></p>
 <p><input type="submit" /></p>
