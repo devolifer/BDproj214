@@ -58,7 +58,7 @@ $_SESSION['username'] = $username;
 $_SESSION['nif'] = $nif;
 
 // Apresenta os leilões
-$sql = "SELECT b.dia, b.nrleilaonodia, b.nif, b.nrdias, b.lid, a.nome FROM leilao AS a, leilaor AS b";
+$sql = "SELECT b.dia, b.nrleilaonodia, b.nif, b.nrdias, b.lid, a.nome, a.valorbase FROM leilao AS a, leilaor AS b";
 $result = $connection->query($sql);
 echo("<table border=\"1\">\n");
 echo("<tr><td>ID</td><td>nif</td><td>dia</td><td>NrDoDia</td><td>nome</td><td>valorbase</td></tr>\n");
@@ -71,12 +71,19 @@ echo($row["nif"]); echo("</td><td>");
 echo($row["dia"]); echo("</td><td>");
 echo($row["nrleilaonodia"]); echo("</td><td>");
 echo($row["nome"]); echo("</td><td>");
+echo($row["valorbase"]); echo("</td>");
 }
 echo("</table>\n");
 ?>
 <form action="Leilao.php" method="post">
 <h2>Escolha o ID do leilão que pretende concorrer</h2>
 <p>ID : <input type="text" name="lid" /></p>
+<p><input type="submit" /></p>
+</form>
+<form action="Lance.php" method="post">
+<h2>Escolha o ID do leilão que pretende fazer lançamento e o valor do lance</h2>
+<p>ID : <input type="text" name="lid" /></p>
+<p>Valor : <input type="text" name="valor" /></p>
 <p><input type="submit" /></p>
 </form>
 </body>

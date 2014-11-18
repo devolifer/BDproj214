@@ -16,6 +16,7 @@ function test_input($data) {
 // Carregamento das variáveis username e pin do form HTML através do metodo POST;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$lid = test_input($_POST["lid"]);
+	$lance = test_input($_POST["valor"]);
 }
 
 // Conexão à BD
@@ -30,20 +31,22 @@ $connection = new PDO("mysql:host=" . $host. ";dbname=" . $dbname, $user, $passw
 array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
 echo("<p>Connected to MySQL database $dbname on $host as user $user</p>\n");
 
-$sql = "SELECT pessoa, leilao, dia, nrdias FROM concorrente, leilaor WHERE pessoa=" . $nif . " AND lid=" . $lid;
+$sql = "SELECT * FROM concorrente WHERE pessoa=" . $nif . " AND leilao=" . $lid;
 $result = $connection->query($sql);
 if (!$result) {
-	$sql = "INSERT INTO concorrente (pessoa,leilao) VALUES (" . $nif . "," . $lid . ")";
-	$result = $connection->query($sql);
-	if (!$result) {
-		echo("<p> Pessoa nao registada: Erro na Query:($sql) <p>");
-		exit();
-	}
-	echo("<p> Pessoa ($username), nif ($nif) Registada no leilao ($lid)</p>\n");
+	echo("<p> Pessoa nao inscrita no leilao: Erro na Query:($sql) <p>");
 	session_destroy();
 	exit();
 }
-echo("<p> Pessoa ja inscrita: Erro na Query:($sql) <p>");
+
+$sql = "INSERT INTO lance VALUES (" . $nif . "," . $lid . "," . $lance . ")";
+$result = $connection->query($sql);
+if (!$result) {
+	echo("<p> Lance duplicado, ou outro erro: Erro na Query:($sql) <p>");
+	session_destroy();
+	exit();
+}
+echo("<p> Pessoa $nif participou com um lance no leilao $lid com o valor $lance € <p>");
 //termina a sessão
 session_destroy();
 ?>
