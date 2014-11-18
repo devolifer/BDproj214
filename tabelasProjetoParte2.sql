@@ -82,6 +82,21 @@ CREATE TABLE lance(
 	FOREIGN KEY (pessoa,leilao)  REFERENCES concorrente(pessoa,leilao)
 );
 
+insert into pessoa 	values (111,		'zé',		12345);
+
+insert into pessoac 	values (111,		10000);
+
+insert into leiloeira	values (111,		33333,	'sintra',	'norte');
+
+insert into leilao	values ('10-10-2010',	1,	111,	'area recursos do norte',	1000,	TRUE);
+
+insert into leilaor	values ('10-10-2010',	1,	111,	5,	0);
+
+insert into concorrente values (111,	0);
+
+insert into lance	values (111,	0,	1500);
+
+
 -- ativa a verificaçõ das chaves estrangeiras
 SET foreign_key_checks = 1 ;
 
