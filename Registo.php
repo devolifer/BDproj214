@@ -58,24 +58,19 @@ $_SESSION['username'] = $username;
 $_SESSION['nif'] = $nif;
 
 // Apresenta os leilões
-$sql = "SELECT * FROM leilao";
+$sql = "SELECT b.dia, b.nrleilaonodia, b.nif, b.nrdias, b.lid, a.nome FROM leilao AS a, leilaor AS b";
 $result = $connection->query($sql);
 echo("<table border=\"1\">\n");
-echo("<tr><td>ID</td><td>nif</td><td>dia</td><td>NrDoDia</td><td>nome</td><td>tipo</td><td>valorbase</td></tr>\n");
-$idleilao = 0;
+echo("<tr><td>ID</td><td>nif</td><td>dia</td><td>NrDoDia</td><td>nome</td><td>valorbase</td></tr>\n");
 
 
 foreach($result as $row){
-$idleilao = $idleilao +1;
 echo("<tr><td>");
-echo($idleilao); echo("</td><td>");
+echo($row["lid"]); echo("</td><td>");
 echo($row["nif"]); echo("</td><td>");
 echo($row["dia"]); echo("</td><td>");
 echo($row["nrleilaonodia"]); echo("</td><td>");
 echo($row["nome"]); echo("</td><td>");
-echo($row["tipo"]); echo("</td><td>");
-echo($row["valorbase"]); echo("</td><td>");
-$leilao[$idleilao]= array($row["nif"],$row["diahora"],$row["nrleilaonodia"]);
 }
 echo("</table>\n");
 ?>

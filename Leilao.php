@@ -30,15 +30,20 @@ $connection = new PDO("mysql:host=" . $host. ";dbname=" . $dbname, $user, $passw
 array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
 echo("<p>Connected to MySQL database $dbname on $host as user $user</p>\n");
 
-//regista a pessoa no leilão. Exemplificativo apenas.....
-$sql = "INSERT INTO concorrente (pessoa,leilao) VALUES ($nif,$lid)";
+$sql = "SELECT pessoa, leilao, dia, nrdias FROM concorrente, leilaor WHERE pessoa=" . $nif . " AND lid=" . $lid;
 $result = $connection->query($sql);
 if (!$result) {
-	echo("<p> Pessoa nao registada: Erro na Query: [$sql] <p>");
+	$sql = "INSERT INTO concorrente (pessoa,leilao) VALUES ($nif,$lid)";
+	$result = $connection->query($sql);
+	if (!$result) {
+		echo("<p> Pessoa nao registada: Erro na Query:($sql) <p>");
+		exit();
+	}
+	echo("<p> Pessoa ($username), nif ($nif) Registada no leilao ($lid)</p>\n");
+	session_destroy();
 	exit();
 }
-echo("<p> Pessoa ($username), nif ($nif) Registada no leilao ($lid)</p>\n");
-// to be continued....
+echo("<p> Pessoa nao registada: Erro na Query:($sql) <p>");
 //termina a sessão
 session_destroy();
 ?>
