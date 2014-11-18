@@ -81,7 +81,7 @@ echo("</table>\n");
 <p><input type="submit" /></p>
 </form>
 <form action="Lance.php" method="post">
-<h2>Escolha o ID do leilão que pretende fazer lançamento e o valor do lance</h2>
+<h2>Escolha o ID do leilão que pretende fazer lançamento e a quantia</h2>
 <p>ID : <input type="text" name="lid" /></p>
 <p>Valor : <input type="text" name="valor" /></p>
 <p><input type="submit" /></p>
