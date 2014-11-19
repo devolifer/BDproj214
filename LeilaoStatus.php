@@ -62,21 +62,19 @@ $_SESSION['nif'] = $nif;
 
 // o estado dos leiloes em curso, o maior lance para cada leilao em q esta inscrito, tempo em falta para esse leilao fechar
 //  select dia, nrdias, date(dia+nrdias), date(dia+nrdias)-curdate() as diasParaAcabar from leilaor;
-// select dia, nrdias, date(dia+nrdias)-curdate() as diasParaAcabar, max(valor) as maiorLance from leilaor, lance where nif=pessoa AND nif=111 AND leilao=lid;
+// select lid, dia, date(dia+nrdias)-curdate() as diasParaAcabar, max(valor) as maiorLance from leilaor as a, lance as b where nif=pessoa AND a.nif=111 AND leilao=lid;
 
-$sql = "SELECT a.dia, a.nrleilaonodia, a.nif, a.lid, b.nome FROM leilao AS b, leilaor AS a WHERE a.dia = b.dia AND a.nif = b.nif AND a.nrleilaonodia = b.nrleilaonodia";
+$sql = "SELECT lid, dia, date(dia+nrdias)-curdate() as diasParaAcabar, max(valor) as maiorLance from leilaor as a, lance as b where nif=pessoa AND a.nif=" . 111 . " AND leilao=lid";
 $result = $connection->query($sql);
 echo("<table border=\"1\">\n");
-echo("<tr><td>ID</td><td>nif</td><td>dia</td><td>NrDoDia</td><td>nome</td></tr>\n");
-
+echo("<tr><td>ID</td><td>dia do ínicio do leilão</td><td>número de dias para terminar</td><td>valor do lance maior</td></tr>\n");
 
 foreach($result as $row){
 echo("<tr><td>");
 echo($row["lid"]); echo("</td><td>");
-echo($row["nif"]); echo("</td><td>");
 echo($row["dia"]); echo("</td><td>");
-echo($row["nrleilaonodia"]); echo("</td><td>");
-echo($row["nome"]); echo("</td>");
+echo($row["diasParaAcabar"]); echo("</td><td>");
+echo($row["maiorLance"]); echo("</td>");
 }
 echo("</table>\n");
 ?>
