@@ -35,24 +35,6 @@ echo("<p>Connected to MySQL database $dbname on $host as user $user</p>\n");
 
 
 
-// obtem o pin da tabela pessoa
-$sql = "SELECT * FROM pessoa WHERE nif=" . $username;
-$result = $connection->query($sql);
-if (!$result) {
-	echo("<p> Erro na Query:($sql)<p>");
-	exit();
-}
-
-foreach($result as $row){
-	$safepin = $row["pin"];
-	$nif = $row["nif"];
-}
-if ($safepin != $pin ) {
-echo "<p>Pin Invalido! Exit!</p>\n";
-$connection = null;
-exit;
-}
-echo "<p>Pin Valido! </p>\n";
 // passa variaveis para a sessao;
 $_SESSION['username'] = $username;
 $_SESSION['nif'] = $nif;

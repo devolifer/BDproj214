@@ -86,5 +86,9 @@ echo("</table>\n");
 <p>Valor : <input type="text" name="valor" /></p>
 <p><input type="submit" /></p>
 </form>
+<form action="LeilaoStatus.php" method="post">
+<h2>Vista detalhada dos leilões em que está inscrito</h2>
+<p><input type="submit" /></p>
+</form>
 </body>
 </html>
