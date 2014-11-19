@@ -38,17 +38,24 @@ if (!$result) {
 	session_destroy();
 	exit();
 }
-
-$sql = "INSERT INTO lance VALUES (" . $nif . "," . $lid . "," . $lance . ")";
-$result = $connection->query($sql);
-if (!$result) {
-	echo("<p> Lance duplicado, ou outro erro: Erro na Query:($sql) <p>");
+$veriDate = "SELECT lid, dia, nrdias, dia+nrdias AS ultdia, curdate() AS today FROM leilaor WHERE lid=" . $lid;
+$result = $connection->query($veriDate);
+if ($result["today"] <=  $result["ultdia"]) {
+	$sql = "INSERT INTO lance VALUES (" . $nif . "," . $lid . "," . $lance . ")";
+	$result = $connection->query($sql);
+	if (!$result) {
+		echo("<p> Lance duplicado, ou outro erro: Erro na Query:($sql) <p>");
+		session_destroy();
+		exit();
+	}
+	echo("<p> Pessoa $nif participou com um lance no leilao $lid com o valor $lance € <p>");
+	//termina a sessão
 	session_destroy();
 	exit();
 }
-echo("<p> Pessoa $nif participou com um lance no leilao $lid com o valor $lance € <p>");
-//termina a sessão
+echo("<p> Leilao terminado, lance cancelado <p>");
 session_destroy();
+exit();
 ?>
 </body>
 </html>
