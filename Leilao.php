@@ -30,10 +30,10 @@ $connection = new PDO("mysql:host=" . $host. ";dbname=" . $dbname, $user, $passw
 array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
 echo("<p>Connected to MySQL database $dbname on $host as user $user</p>\n");
 
+$sql = "SELECT count(*) as a FROM concorrente WHERE pessoa=" . $nif . " AND leilao=" . $lid;
+$veriSign = $connection->query($sql);
 
-$sql = "SELECT * FROM concorrente, leilaor WHERE pessoa=" . $nif . " AND lid=" . $lid;
-$result = $connection->query($sql);
-if (!$result) {
+if ($veriSign['a'] == 0) {
 	$veriDate = "SELECT lid, dia, nrdias, dia+nrdias AS ultdia, curdate() AS today FROM leilaor WHERE lid=" . $lid;
 	$result = $connection->query($veriDate);
 	if ($result["today"] <=  $result["ultdia"]) {
@@ -51,7 +51,7 @@ if (!$result) {
 	session_destroy();
 	exit();
 }
-echo("<p> Pessoa ja inscrita: Erro na Query:($sql) <p>");
+echo("<p> Pessoa ja inscrita: ou Erro na Query:($sql) <p>");
 //termina a sessão
 session_destroy();
 ?>

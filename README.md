@@ -8,12 +8,17 @@ o file login.htm esta a chamar o registo.php, ou mudas o nome do file ou troca-s
 mm coisa para o file leilao.php
 o ficheiro base esta a chamar a coluna diahora q n existe, o nome é dia apenas
 so se pode inscrever ate que o leilao termine
+outra vista para os leiloes em curso, com 2 colunas extra, nos leilaoes em q esta inscrito aparecem os lances com maior valor(o ult) e o tempo em falta para esse leilao terminar
 
+OBS list:
+na minha tabela concorrente so estao os concorrentes aos leiloes recurso
+tb para a tabela lance e tb para a o id de leiloes, apenas leiloes recurso teem id
+
+BUG list:
+nao estou a conseguir inscrever um sujeito
+falta conseguir testar isso, para continuar para outros testes
 
 TODO list:
-alterar as tabelas para inserir uns quantos tuplos exemplos e que permitam testar alguma parte do código eventualmente
-*QUASE* outra vista para os leiloes em curso, com 2 colunas extra, nos leilaoes em q esta inscrito aparecem os lances com maior valor(o ult) e o tempo em falta para esse leilao terminar
-o script registo agora tem de ter outro form, em que mostra o estado dos leiloes o 2.5
 3.1
 3.2
 3.3
