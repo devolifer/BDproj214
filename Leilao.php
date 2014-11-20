@@ -33,7 +33,7 @@ echo("<p>Connected to MySQL database $dbname on $host as user $user</p>\n");
 $sql = "SELECT count(*) as a FROM concorrente WHERE pessoa=" . $nif . " AND leilao=" . $lid;
 $veriSign = $connection->query($sql);
 
-if ($veriSign['a'] == 0) {
+if ($veriSign[0] == 0) {
 	$veriDate = "SELECT lid, dia, nrdias, dia+nrdias AS ultdia, curdate() AS today FROM leilaor WHERE lid=" . $lid;
 	$result = $connection->query($veriDate);
 	if ($result["today"] <=  $result["ultdia"]) {
