@@ -35,9 +35,9 @@ echo("<p>Connected to MySQL database $dbname on $host as user $user</p>\n");
 
 
 
-// passa variaveis para a sessao;
-$_SESSION['username'] = $username;
-$_SESSION['nif'] = $nif;
+// passa a sessao para variaveis;
+$username = $_SESSION['username'];
+$nif = $_SESSION['nif'];
 
 // Apresenta os leilões
 // $sql = "SELECT b.dia, b.nrleilaonodia, b.nif, b.nrdias, b.lid, a.nome, a.valorbase FROM leilao AS a, leilaor AS b";
@@ -45,8 +45,8 @@ $_SESSION['nif'] = $nif;
 // o estado dos leiloes em curso, o maior lance para cada leilao em q esta inscrito, tempo em falta para esse leilao fechar
 //  select dia, nrdias, date(dia+nrdias), date(dia+nrdias)-curdate() as diasParaAcabar from leilaor;
 // select lid, dia, date(dia+nrdias)-curdate() as diasParaAcabar, max(valor) as maiorLance from leilaor as a, lance as b where nif=pessoa AND a.nif=111 AND leilao=lid;
-
-$sql = "SELECT lid, dia, date(dia+nrdias)-curdate() as diasParaAcabar, max(valor) as maiorLance from leilaor as a, lance as b where nif=pessoa AND a.nif=$username AND leilao=lid";
+// SELECT lid, dia, date(dia+nrdias)-curdate() as diasParaAcabar, max(valor) as maiorLance from leilaor as a, lance as b where b.pessoa=333 AND leilao=lid
+$sql = "SELECT lid, dia, date(dia+nrdias)-curdate() as diasParaAcabar, max(valor) as maiorLance from leilaor as a, lance as b where b.pessoa=$nif AND leilao=lid";
 $result = $connection->query($sql);
 echo("<table border=\"1\">\n");
 echo("<tr><td>ID</td><td>dia do ínicio do leilão</td><td>número de dias para terminar</td><td>valor do lance maior</td></tr>\n");
