@@ -5,6 +5,8 @@
 session_start();
 $username = $_SESSION['username'];
 $nif = $_SESSION['nif'];
+
+
 // Função para limpar os dados de entrada
 function test_input($data) {
 	$data = trim($data);
@@ -28,16 +30,21 @@ $password = "rrdu5980";
 $dbname = $user; // a BD tem nome identico ao utilizador
 $connection = new PDO("mysql:host=" . $host. ";dbname=" . $dbname, $user, $password,
 array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
-echo("<p>Connected to MySQL database $dbname on $host as user $user</p>\n");
+echo("<p>Connected to MySQL database $dbname on $host as user $user about auction $lid</p>\n");
 
-$sql = "SELECT count(*) as a FROM concorrente WHERE pessoa=" . $nif . " AND leilao=" . $lid;
-$veriSign = $connection->query($sql);
-
-if ($veriSign[0] == 0) {
-	$veriDate = "SELECT lid, dia, nrdias, dia+nrdias AS ultdia, curdate() AS today FROM leilaor WHERE lid=" . $lid;
-	$result = $connection->query($veriDate);
+$sql = "SELECT count(*) as a FROM concorrente WHERE pessoa=$nif AND leilao=$lid";
+$sth = $connection->prepare($sql);
+$sth->execute();
+$veriSign = $sth->fetch(PDO::FETCH_ASSOC);
+if ($veriSign["a"] == 0) {
+	$veriDate = "SELECT lid, dia, nrdias, dia+nrdias AS ultdia, curdate() AS today FROM leilaor WHERE lid=$lid";
+	
+	$sth = $connection->prepare($veriDate);
+	$sth->execute();
+	$result = $sth->fetch(PDO::FETCH_ASSOC);
+	
 	if ($result["today"] <=  $result["ultdia"]) {
-		$sql = "INSERT INTO concorrente (pessoa,leilao) VALUES (" . $nif . "," . $lid . ")";
+		$sql = "INSERT INTO concorrente (pessoa,leilao) VALUES ($nif, $lid)";
 		$result = $connection->query($sql);
 		if (!$result) {
 			echo("<p> Pessoa nao registada: Erro na Query:($sql) <p>");
