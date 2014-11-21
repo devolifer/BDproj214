@@ -46,7 +46,7 @@ $_SESSION['nif'] = $nif;
 //  select dia, nrdias, date(dia+nrdias), date(dia+nrdias)-curdate() as diasParaAcabar from leilaor;
 // select lid, dia, date(dia+nrdias)-curdate() as diasParaAcabar, max(valor) as maiorLance from leilaor as a, lance as b where nif=pessoa AND a.nif=111 AND leilao=lid;
 
-$sql = "SELECT lid, dia, date(dia+nrdias)-curdate() as diasParaAcabar, max(valor) as maiorLance from leilaor as a, lance as b where nif=pessoa AND a.nif=" . 111 . " AND leilao=lid";
+$sql = "SELECT lid, dia, date(dia+nrdias)-curdate() as diasParaAcabar, max(valor) as maiorLance from leilaor as a, lance as b where nif=pessoa AND a.nif=$username AND leilao=lid";
 $result = $connection->query($sql);
 echo("<table border=\"1\">\n");
 echo("<tr><td>ID</td><td>dia do ínicio do leilão</td><td>número de dias para terminar</td><td>valor do lance maior</td></tr>\n");

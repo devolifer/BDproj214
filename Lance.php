@@ -38,8 +38,10 @@ if (!$result) {
 	session_destroy();
 	exit();
 }
-$veriDate = "SELECT lid, dia, nrdias, dia+nrdias AS ultdia, curdate() AS today FROM leilaor WHERE lid=" . $lid;
-$result = $connection->query($veriDate);
+$veriDate = "SELECT lid, dia, nrdias, dia+nrdias AS ultdia, curdate()+0 AS today FROM leilaor WHERE lid=" . $lid;
+$sth = $connection->prepare($veriDate);
+$sth->execute();
+$result = $sth->fetch(PDO::FETCH_ASSOC);
 if ($result["today"] <=  $result["ultdia"]) {
 	$sql = "INSERT INTO lance VALUES (" . $nif . "," . $lid . "," . $lance . ")";
 	$result = $connection->query($sql);
