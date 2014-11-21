@@ -37,7 +37,7 @@ $sth = $connection->prepare($sql);
 $sth->execute();
 $veriSign = $sth->fetch(PDO::FETCH_ASSOC);
 if ($veriSign["a"] == 0) {
-	$veriDate = "SELECT lid, dia, nrdias, dia+nrdias AS ultdia, curdate() AS today FROM leilaor WHERE lid=$lid";
+	$veriDate = "SELECT lid, dia, nrdias, dia+nrdias AS ultdia, curdate()+0 AS today FROM leilaor WHERE lid=$lid";
 	
 	$sth = $connection->prepare($veriDate);
 	$sth->execute();
