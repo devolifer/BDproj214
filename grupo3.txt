@@ -1,0 +1,53 @@
+1
+Quais os participantes inscritos em leilões mas sem lances até à data?
+not (concorrentes que estejam inscritos em a,b,c leiloes, mas nao fizeram lance no b)
+ 
+select * from concorrente where pessoa not in (select b.pessoa from lance as b); 
+
+
+2
+
+
+
+// select pessoa, count(leilao) as soma from concorrente group by pessoa having soma = 2;
+
+
+select nome from pessoa where nif in (select nif from pessoac where nif in ( select pessoa as nif from concorrente group by pessoa having count(leilao) = 2));
+
+
+3
+demo v
+ select a.dia, a.nrleilaonodia, a.nif, a.nrdias, a.lid, b.nome, b.valorbase, max(c.valor) as bigLance, max(c.valor)/b.valorbase as racio from leilaor as a, leilao as b, lance as c where a.lid=c.leilao and (a.dia, a.nrleilaonodia, a.nif) = (b.dia, b.nrleilaonodia, b.nif) group by lid;
+
+
+// creado isto mete 8 sec de atraso
+ select max(racio) as biggestBet from (select max(c.valor)/b.valorbase as racio 
+from leilaor as a, leilao as b, lance as c where 
+a.lid=c.leilao and (a.dia, a.nrleilaonodia, a.nif) = (b.dia, b.nrleilaonodia, b.nif)   group by lid ) as auxtbl;
+
+
+
+select * from leilaor 
+where lid  in 
+(select *, max(g.valor)/f.valorbase as biggestBet 
+from leilaor as e, leilao as f, lance as g  
+where e.lid=g.leilao and (e.dia, e.nrleilaonodia, e.nif) = (f.dia, f.nrleilaonodia, f.nif) and biggestBet in 
+(select max(racio) as biggestBet from 
+(select max(c.valor)/b.valorbase as racio 
+from leilaor as a, leilao as b, lance as c 
+where a.lid=c.leilao and (a.dia, a.nrleilaonodia, a.nif) = (b.dia, b.nrleilaonodia, b.nif)   
+group by lid ) as auxtbl));
+
+
+//done
+ (select *, max(g.valor)/f.valorbase as biggestBet  from leilaor as e, leilao as f, lance as g   where e.lid=g.leilao and (e.dia, e.nrleilaonodia, e.nif) = (f.dia, f.nrleilaonodia, f.nif) having biggestBet in  (select max(racio) as biggestBet from  (select max(c.valor)/b.valorbase as racio  from leilaor as a, leilao as b, lance as c  where a.lid=c.leilao and (a.dia, a.nrleilaonodia, a.nif) = (b.dia, b.nrleilaonodia, b.nif)    group by lid ) as auxtbl));
+//done & clean
+ (select e.dia, e.nrleilaonodia, e.nif as nifLeiloeira, e.nrdias as nrdiaspacabar, e.lid, f.nome, f.valorbase, max(g.valor) as maiorLance, max(g.valor)/f.valorbase as Racio  from leilaor as e, leilao as f, lance as g   where e.lid=g.leilao and (e.dia, e.nrleilaonodia, e.nif) = (f.dia, f.nrleilaonodia, f.nif) having Racio in  (select max(racio) as Racio from  (select max(c.valor)/b.valorbase as racio  from leilaor as a, leilao as b, lance as c  where a.lid=c.leilao and (a.dia, a.nrleilaonodia, a.nif) = (b.dia, b.nrleilaonodia, b.nif)    group by lid ) as auxtbl));
+
+
+4
+//cracked
+select * from pessoac as a join pessoac as b where a.capitalsocial = b.capitalsocial and a.nif != b.nif;
+
+ select a.nif as nifDosAmigosDoCapitalismo from pessoac as a join pessoac as b where a.capitalsocial = b.capitalsocial and a.nif != b.nif;
+

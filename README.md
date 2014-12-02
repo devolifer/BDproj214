@@ -16,24 +16,18 @@ ele permite inscrever em leiloes que ja acabaram -- dealt  afinal era só um +0 
 as tres coisas q deviam tar feitas estao buggadas qa giro -- ja nao sao as 3
 a stmnt do leilaostatus esta male
 permite lances de menor valor -- nao e um bug, tem de ser feito com trigger
-
-OBS list:
-na minha tabela concorrente so estao os concorrentes aos leiloes recurso
-tb para a tabela lance e tb para a o id de leiloes, apenas leiloes recurso teem id
-
-BUG list:
-<clean>  :D
-
-
-
-TODO list:
 3.1
 3.2
 3.3
 3.4
-4.1
-4.2
 4
+
+BUG list:
+o leilaoStatus so esta a mostrar um unico registo
+
+
+TODO list:
+1
 5
 6
 7
