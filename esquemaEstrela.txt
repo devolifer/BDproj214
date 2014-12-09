@@ -1,0 +1,99 @@
+select *, max(lance.valor) 
+from leilao, leilaor, lance, leiloeira 
+where 	leilao.dia=leilaor.dia and 
+	leilao.nrleilaonodia=leilaor.nrleilaonodia and 
+	leilao.nif=leilaor.nif and 
+	leilaor.lid=lance.leilao and 
+	leilao.nif=leiloeira.nif 
+group by leilaor.lid;
+
++------------+---------------+-----+-----------------------------------+-----------+------+------------+---------------+-----+--------+-----+--------+--------+-------+-----+----------+----------------------------------------------+-----------------+------------------+
+| dia        | nrleilaonodia | nif | nome                              | valorbase | tipo | dia        | nrleilaonodia | nif | nrdias | lid | pessoa | leilao | valor | nif | nralvara | concelho                                     | regiao          | max(lance.valor) |
++------------+---------------+-----+-----------------------------------+-----------+------+------------+---------------+-----+--------+-----+--------+--------+-------+-----+----------+----------------------------------------------+-----------------+------------------+
+| 0000-00-00 |             1 | 111 | area recursos do norte            |      1000 |    1 | 0000-00-00 |             1 | 111 |      5 |   1 |    111 |      1 |  1500 | 111 |    33333 | sintra                                       | norte           |             2000 |
+| 2014-11-19 |             1 | 123 | area51                            |       500 |    1 | 2014-11-19 |             1 | 123 |     10 |   3 |    333 |      3 |   200 | 123 |   101010 | laranja de manhã dá saúde e à noite mata     | coisas q se diz |              550 |
+| 2014-11-25 |             1 | 123 | xpto                              |      2000 |    1 | 2014-11-25 |             1 | 123 |     10 |   6 |    333 |      6 |  2500 | 123 |   101010 | laranja de manhã dá saúde e à noite mata     | coisas q se diz |             2500 |
+| 2014-12-02 |             1 | 123 | mais uma area para testar trigres |      1000 |    1 | 2014-12-02 |             1 | 123 |     10 |   8 |    333 |      8 |  1001 | 123 |   101010 | laranja de manhã dá saúde e à noite mata     | coisas q se diz |             1004 |
++------------+---------------+-----+-----------------------------------+-----------+------+------------+---------------+-----+--------+-----+--------+--------+-------+-----+----------+----------------------------------------------+-----------------+------------------+
+
+
+
+
+ select * from leilao as a, leilaor as b, lance as c, leiloeira as d where a.dia=b.dia and a.nrleilaonodia=b.nrleilaonodia and a.nif = b.nif and b.lid=c.leilao and a.nif=d.nif group by a.dia, d.regiao, d.concelho with rollup; 
+
++------------+---------------+-----+-----------------------------------+-----------+------+------------+---------------+-----+--------+-----+--------+--------+-------+-----+----------+----------------------------------------------+-----------------+
+| dia        | nrleilaonodia | nif | nome                              | valorbase | tipo | dia        | nrleilaonodia | nif | nrdias | lid | pessoa | leilao | valor | nif | nralvara | concelho                                     | regiao          |
++------------+---------------+-----+-----------------------------------+-----------+------+------------+---------------+-----+--------+-----+--------+--------+-------+-----+----------+----------------------------------------------+-----------------+
+| 0000-00-00 |             1 | 111 | area recursos do norte            |      1000 |    1 | 0000-00-00 |             1 | 111 |      5 |   1 |    111 |      1 |  1500 | 111 |    33333 | sintra                                       | norte           |
+| 0000-00-00 |             1 | 111 | area recursos do norte            |      1000 |    1 | 0000-00-00 |             1 | 111 |      5 |   1 |    111 |      1 |  1500 | 111 |    33333 | NULL                                         | norte           |
+| 0000-00-00 |             1 | 111 | area recursos do norte            |      1000 |    1 | 0000-00-00 |             1 | 111 |      5 |   1 |    111 |      1 |  1500 | 111 |    33333 | NULL                                         | NULL            |
+| 2014-11-19 |             1 | 123 | area51                            |       500 |    1 | 2014-11-19 |             1 | 123 |     10 |   3 |    333 |      3 |   200 | 123 |   101010 | laranja de manhã dá saúde e à noite mata     | coisas q se diz |
+| 2014-11-19 |             1 | 123 | area51                            |       500 |    1 | 2014-11-19 |             1 | 123 |     10 |   3 |    333 |      3 |   200 | 123 |   101010 | NULL                                         | coisas q se diz |
+| 2014-11-19 |             1 | 123 | area51                            |       500 |    1 | 2014-11-19 |             1 | 123 |     10 |   3 |    333 |      3 |   200 | 123 |   101010 | NULL                                         | NULL            |
+| 2014-11-25 |             1 | 123 | xpto                              |      2000 |    1 | 2014-11-25 |             1 | 123 |     10 |   6 |    333 |      6 |  2500 | 123 |   101010 | laranja de manhã dá saúde e à noite mata     | coisas q se diz |
+| 2014-11-25 |             1 | 123 | xpto                              |      2000 |    1 | 2014-11-25 |             1 | 123 |     10 |   6 |    333 |      6 |  2500 | 123 |   101010 | NULL                                         | coisas q se diz |
+| 2014-11-25 |             1 | 123 | xpto                              |      2000 |    1 | 2014-11-25 |             1 | 123 |     10 |   6 |    333 |      6 |  2500 | 123 |   101010 | NULL                                         | NULL            |
+| 2014-12-02 |             1 | 123 | mais uma area para testar trigres |      1000 |    1 | 2014-12-02 |             1 | 123 |     10 |   8 |    333 |      8 |  1002 | 123 |   101010 | laranja de manhã dá saúde e à noite mata     | coisas q se diz |
+| 2014-12-02 |             1 | 123 | mais uma area para testar trigres |      1000 |    1 | 2014-12-02 |             1 | 123 |     10 |   8 |    333 |      8 |  1002 | 123 |   101010 | NULL                                         | coisas q se diz |
+| 2014-12-02 |             1 | 123 | mais uma area para testar trigres |      1000 |    1 | 2014-12-02 |             1 | 123 |     10 |   8 |    333 |      8 |  1002 | 123 |   101010 | NULL                                         | NULL            |
+| NULL       |             1 | 123 | mais uma area para testar trigres |      1000 |    1 | 2014-12-02 |             1 | 123 |     10 |   8 |    333 |      8 |  1002 | 123 |   101010 | NULL                                         | NULL            |
++------------+---------------+-----+-----------------------------------+-----------+------+------------+---------------+-----+--------+-----+--------+--------+-------+-----+----------+----------------------------------------------+-----------------+
+
+
+select a.dia, a.nrleilaonodia, a.nif, a.nome, b.lid, d.nralvara, d.regiao, d.concelho, max(c.valor) as maiorlance from leilao as a, leilaor as b, lance as c, leiloeira as d where a.dia=b.dia and a.nrleilaonodia=b.nrleilaonodia and a.nif = b.nif and b.lid=c.leilao and a.nif=d.nif group by a.dia, d.regiao, d.concelho with rollup; 
++------------+---------------+-----+-----------------------------------+-----+----------+-----------------+----------------------------------------------+------------+
+| dia        | nrleilaonodia | nif | nome                              | lid | nralvara | regiao          | concelho                                     | maiorlance |
++------------+---------------+-----+-----------------------------------+-----+----------+-----------------+----------------------------------------------+------------+
+| 0000-00-00 |             1 | 111 | area recursos do norte            |   1 |    33333 | norte           | sintra                                       |       2000 |
+| 0000-00-00 |             1 | 111 | area recursos do norte            |   1 |    33333 | norte           | NULL                                         |       2000 |
+| 0000-00-00 |             1 | 111 | area recursos do norte            |   1 |    33333 | NULL            | NULL                                         |       2000 |
+| 2014-11-19 |             1 | 123 | area51                            |   3 |   101010 | coisas q se diz | laranja de manhã dá saúde e à noite mata     |        550 |
+| 2014-11-19 |             1 | 123 | area51                            |   3 |   101010 | coisas q se diz | NULL                                         |        550 |
+| 2014-11-19 |             1 | 123 | area51                            |   3 |   101010 | NULL            | NULL                                         |        550 |
+| 2014-11-25 |             1 | 123 | xpto                              |   6 |   101010 | coisas q se diz | laranja de manhã dá saúde e à noite mata     |       2500 |
+| 2014-11-25 |             1 | 123 | xpto                              |   6 |   101010 | coisas q se diz | NULL                                         |       2500 |
+| 2014-11-25 |             1 | 123 | xpto                              |   6 |   101010 | NULL            | NULL                                         |       2500 |
+| 2014-12-02 |             1 | 123 | mais uma area para testar trigres |   8 |   101010 | coisas q se diz | laranja de manhã dá saúde e à noite mata     |       1004 |
+| 2014-12-02 |             1 | 123 | mais uma area para testar trigres |   8 |   101010 | coisas q se diz | NULL                                         |       1004 |
+| 2014-12-02 |             1 | 123 | mais uma area para testar trigres |   8 |   101010 | NULL            | NULL                                         |       1004 |
+| NULL       |             1 | 123 | mais uma area para testar trigres |   8 |   101010 | NULL            | NULL                                         |       2500 |
++------------+---------------+-----+-----------------------------------+-----+----------+-----------------+----------------------------------------------+------------+
+
+
+
+
+nada disto me ajuda 
+quero fazer uma nova table e um event para cada final de dia
+
+
+
+
+
+
+
+delimiter //
+CREATE EVENT fechaDia
+ON SCHEDULE EVERY 1 DAY
+DO
+INSERT ON tabelaFactos VALUES 
+
+		SELECT curdate(), b.lid, d.nralvara, d.regiao, d.concelho , max(c.valor) as maiorLance from leilao as a, leilaor as b, lance as c, leiloeira as d where a.dia=b.dia and a.nrleilaonodia=b.nrleilaonodia and a.nif = b.nif and b.lid=c.leilao and a.nif=d.nif group by a.dia, d.regiao, d.concelho with rollup;  
+		(curdate(), 
+
+
+
+
+
+CREATE TABLE tabelaFactos(
+	data		DATE NOT NULL,
+	leilaoID	INT NOT NULL,
+	nifLeiloeira	INT,
+	regiao		VARCHAR (80) NULL,
+	concelho	VARCHAR (80) NULL,
+	maiorLance	INT NOT NULL,
+	PRIMARY KEY (data, leilaoID),
+	FOREIGN KEY (leilaoID) REFERENCES leilaor(lid),
+	FOREIGN KEY (maiorLance) REFERENCES lance(valor),
+	FOREIGN KEY (nifLeiloeira, regiao, concelho) REFERENCES leiloeira(nif, regiao, concelho));
+		 
+		 
