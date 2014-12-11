@@ -45,9 +45,78 @@ group by lid ) as auxtbl));
  (select e.dia, e.nrleilaonodia, e.nif as nifLeiloeira, e.nrdias as nrdiaspacabar, e.lid, f.nome, f.valorbase, max(g.valor) as maiorLance, max(g.valor)/f.valorbase as Racio  from leilaor as e, leilao as f, lance as g   where e.lid=g.leilao and (e.dia, e.nrleilaonodia, e.nif) = (f.dia, f.nrleilaonodia, f.nif) having Racio in  (select max(racio) as Racio from  (select max(c.valor)/b.valorbase as racio  from leilaor as a, leilao as b, lance as c  where a.lid=c.leilao and (a.dia, a.nrleilaonodia, a.nif) = (b.dia, b.nrleilaonodia, b.nif)    group by lid ) as auxtbl));
 
 
+ 
+ --NUNO: versao apresentavel
+(select e.dia, e.nrleilaonodia, e.nif as nifLeiloeira, e.nrdias as nrdiaspacabar, e.lid, f.nome, f.valorbase, max(g.valor) as maiorLance, max(g.valor)/f.valorbase as Racio  
+from leilaor as e, leilao as f, lance as g   
+where e.lid=g.leilao and (e.dia, e.nrleilaonodia, e.nif) = (f.dia, f.nrleilaonodia, f.nif) having Racio in  
+	(select max(racio) as Racio 
+	from  
+	(select max(c.valor)/b.valorbase as racio  from leilaor as a, leilao as b, lance as c  
+	where a.lid=c.leilao and (a.dia, a.nrleilaonodia, a.nif) = (b.dia, b.nrleilaonodia, b.nif)    
+	group by lid ) as auxtbl));
+
+ 
+
+SELECT res.leilao, MAX(res.maiorlance/res.valorbase) as racio FROM
+	(SELECT leilao, MAX(valor) as maiorlance, valorbase
+	FROM lance as la, leilaor as lr, leilao as l
+	WHERE lr.lid=la.leilao AND l.dia=lr.dia AND l.nrleilaonodia=lr.nrleilaonodia AND l.nif=lr.nif) as res
+	GROUP BY leilao;
+ 
+	
+meu definitivo
+select max(racio) as biggestBet from (select max(c.valor)/b.valorbase as racio  from leilaor as a, leilao as b, lance as c where  a.lid=c.leilao and (a.dia, a.nrleilaonodia, a.nif) = (b.dia, b.nrleilaonodia, b.nif)   group by lid ) as auxtbl;
+
+
+
+select a.dia, a.nrleilaonodia, a.nif, a.nrdias, a.lid, b.nome, b.valorbase, max(c.valor) as bigLance, max(c.valor)/b.valorbase as racio from leilaor a, leilao as b, lance as c where a.lid=c.leilao and (a.dia, a.nrleilaonodia, a.nif) = (b.dia, b.nrleilaonodia, b.nif) group by lid;
+select a.dia, a.nrleilaonodia, a.nif, a.nrdias, a.lid, b.nome, b.valorbase, max(c.valor) as bigLance, max(c.valor)/b.valorbase as racio from leilaor a, leilao as b, lance as c where a.lid=c.leilao and (a.dia, a.nrleilaonodia, a.nif) = (b.dia, b.nrleilaonodia, b.nif) group by lid order by racio limit 1;
+	
+select a.dia, a.nrleilaonodia, a.nif, a.nrdias, a.lid, b.nome, b.valorbase, max(c.valor) as bigLance, max(c.valor)/b.valorbase as racio 
+from leilaor a, leilao as b, lance as c 
+where a.lid=c.leilao and (a.dia, a.nrleilaonodia, a.nif) = (b.dia, b.nrleilaonodia, b.nif) 
+group by lid 
+order by racio desc 
+limit 1;
+
+SELECT a.dia, a.nrleilaonodia, a.nif, a.nrdias, a.lid, b.nome, b.valorbase, max(c.valor) AS bigLance, max(c.valor)/b.valorbase AS racio 
+FROM leilaor AS a, leilao AS b, lance AS c 
+WHERE a.lid=c.leilao AND (a.dia, a.nrleilaonodia, a.nif) = (b.dia, b.nrleilaonodia, b.nif) 
+GROUP BY lid 
+ORDER BY racio DESC
+LIMIT 1;
+
+30010,001
+dont lose track of dis
+
+select * from 
+(SELECT a.dia, a.nrleilaonodia, a.nif, a.nrdias, a.lid, b.nome, b.valorbase, max(c.valor) AS bigLance, max(c.valor)/b.valorbase AS racio 
+FROM leilaor AS a, leilao AS b, lance AS c 
+WHERE a.lid=c.leilao AND (a.dia, a.nrleilaonodia, a.nif) = (b.dia, b.nrleilaonodia, b.nif) 
+GROUP BY lid 
+ORDER BY racio DESC) as tblaux1 left join
+(SELECT a.dia, a.nrleilaonodia, a.nif, a.nrdias, a.lid, b.nome, b.valorbase, max(c.valor) AS bigLance, max(c.valor)/b.valorbase AS racio 
+FROM leilaor AS a, leilao AS b, lance AS c 
+WHERE a.lid=c.leilao AND (a.dia, a.nrleilaonodia, a.nif) = (b.dia, b.nrleilaonodia, b.nif) 
+GROUP BY lid 
+ORDER BY racio DESC
+limit 1) as tblaux2
+on (tblaux1.racio = tblaux2.racio);
+
+
+
+ select * from leilaor left join (SELECT a.dia, a.nrleilaonodia, a.nif, a.nrdias, a.lid as leilaao, b.nome, b.valorbase, max(c.valor) AS bigLance, max(c.valor)/b.valorbase AS racio  FROM leilaor AS a, leilao AS b, lance AS c  WHERE a.lid=c.leilao AND (a.dia, a.nrleilaonodia, a.nif) = (b.dia, b.nrleilaonodia, b.nif)  GROUP BY lid  ORDER BY racio DESC LIMIT 1) as hack on (leilaor.lid=hack.leilaao);
+
+
+
+
 4
 //cracked
 select * from pessoac as a join pessoac as b where a.capitalsocial = b.capitalsocial and a.nif != b.nif;
 
  select a.nif as nifDosAmigosDoCapitalismo from pessoac as a join pessoac as b where a.capitalsocial = b.capitalsocial and a.nif != b.nif;
 
+
+ 
+ 

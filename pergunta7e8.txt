@@ -1,0 +1,93 @@
+CREATE TABLE tabelaFactos( 
+	dataAmostra DATE NOT NULL, 
+	lid INT NOT NULL, 
+	nifLeiloeira INT, 
+	regiao VARCHAR (80) NULL, 
+	concelho VARCHAR (80) NULL, 
+	maiorLance INT NOT NULL,
+	PRIMARY KEY(dataAmostra, lid), 
+	FOREIGN KEY (lid) REFERENCES leilaor(lid), 
+	FOREIGN KEY (maiorLance) REFERENCES lance(valor), 
+	FOREIGN KEY (nifLeiloeira, regiao, concelho) REFERENCES leiloeira(nif, regiao, concelho));
+
+
+
+insert into tabelaFactos  
+	select curdate(), b.lid, d.regiao, d.concelho, max(c.valor) as maiorLance 
+	from leilao as a, leilaor as b, lance as c, leiloeira as d 
+	where (a.dia, a.nrleilaonodia, a.nif)=(b.dia, b.nrleilaonodia, b.nif) and d.nif=a.nif and c.leilao=b.lid 
+	group by b.lid, d.concelho, d.regiao 
+	order by lid;
+
+
+
+
+DELIMITER //
+CREATE PROCEDURE ColecionaAmostra 
+BEGIN
+	set @dia=curdate();
+	insert into tabelaFactos 
+	select @dia, b.lid, d.regiao, d.concelho, max(c.valor) as maiorLance 
+	from leilao as a, leilaor as b, lance as c, leiloeira as d 
+	where (a.dia, a.nrleilaonodia, a.nif)=(b.dia, b.nrleilaonodia, b.nif) and d.nif=a.nif and c.leilao=b.lid 
+	group by b.lid, d.concelho, d.regiao order by lid//
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE ColecionaAmostra 
+BEGIN
+	insert into tabelaFactos  
+	select curdate(), b.lid, d.regiao, d.concelho, max(c.valor) as maiorLance 
+	from leilao as a, leilaor as b, lance as c, leiloeira as d 
+	where (a.dia, a.nrleilaonodia, a.nif)=(b.dia, b.nrleilaonodia, b.nif) and d.nif=a.nif and c.leilao=b.lid 
+	group by b.lid, d.concelho, d.regiao 
+	order by lid;
+END //
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE ColecionaAmostra ()
+BEGIN
+	insert into tabelaFactos
+	select curdate(), b.lid, d.regiao, d.concelho, max(c.valor) as maiorLance 
+	from leilao as a, leilaor as b, lance as c, leiloeira as d 
+	where (a.dia, a.nrleilaonodia, a.nif)=(b.dia, b.nrleilaonodia, b.nif) and d.nif=a.nif and c.leilao=b.lid 
+	group by b.lid, d.concelho, d.regiao 
+	order by lid;
+
+END //
+DELIMITER ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pergunta 8:
+
+ir buscar o apenas os lances maiores para cada leilao, havera de ser o mais actualizado
+ select *, max(maiorLance) from tabelaFactos group by lid;
+
+
+maybe??
+select *,sum(huck) from (select *, max(maiorLance) as huck from tabelaFactos group by lid) as hack group by concelho;
+
+
+
+
+ select *, sum(hack.heck) as gold from (select *, max(maiorLance) as heck from tabelaFactos group by lid) as hack group by concelho;
